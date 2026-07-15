@@ -104,6 +104,8 @@ function initTravelers() {
 }
 
 function initCountdown() {
+  if (!document.getElementById("countdown")) return;
+  
   const targetDate = new Date("2026-09-19T15:00:00").getTime();
   
   function updateCountdown() {
@@ -318,6 +320,7 @@ function zoomToLocation(locKey) {
 // 5. Route Switching Operations
 // ==========================================
 function setActiveRoute(routeId) {
+  if (!document.getElementById("route-selector-buttons")) return;
   currentActiveRouteId = routeId;
   
   // Update Selector Button UI

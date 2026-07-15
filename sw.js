@@ -1,7 +1,11 @@
-const CACHE_NAME = 'vietnam-trip-v2';
+const CACHE_NAME = 'vietnam-trip-v3';
 const ASSETS = [
   './',
   './index.html',
+  './guide.html',
+  './compare.html',
+  './planner.html',
+  './tips.html',
   './style.css',
   './app.js',
   './data.js',
