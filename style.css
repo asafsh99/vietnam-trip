@@ -40,6 +40,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -1073,11 +1074,17 @@ footer {
   }
   
   .planner-workspace {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
   
-  .route-detail-card, .map-card {
-    height: 550px;
+  .route-detail-card {
+    height: auto;
+  }
+  
+  .map-card {
+    height: 450px;
   }
   
   .upgrades-grid {
@@ -1093,11 +1100,41 @@ footer {
   .header-container {
     flex-direction: column;
     gap: 15px;
-    padding: 15px 20px;
+    padding: 15px 10px;
   }
   
+  nav {
+    width: 100%;
+  }
+
+  nav ul {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    padding: 8px 10px;
+    gap: 12px;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide standard scrollbar in Firefox */
+  }
+
+  nav ul::-webkit-scrollbar {
+    display: none; /* Hide scrollbar in Chrome/Safari */
+  }
+  
+  nav li {
+    flex: 0 0 auto;
+  }
+  
+  nav a {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
   .section-title, .compare-section, .planner-workspace, .upgrades-hub, .hero-section {
-    padding: 0 20px;
+    padding: 0 15px;
   }
   
   .upgrades-grid {
@@ -1131,15 +1168,17 @@ footer {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  nav ul {
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
+  .map-card {
+    height: 320px;
   }
   
-  nav a {
-    padding: 6px 10px;
-    font-size: 0.85rem;
+  /* Place map on top of itinerary on mobile */
+  .itinerary-column {
+    order: 2;
+  }
+  
+  .map-column {
+    order: 1;
   }
 }
 

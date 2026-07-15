@@ -1,8 +1,8 @@
 const travelersData = {
-  parents: { name: "אבא ואמא (בני 55)", image: "תמונות/אמא ואבא.jpeg" },
-  naama: { name: "נעמה (בת 30)", image: "תמונות/נעמה.jpeg" },
-  userDana: { name: "אסף ודנה (בני 27)", image: "תמונות/אסף ודנה.jpeg" },
-  nadav: { name: "נדב (בן 26 - מצטרף מתאילנד)", image: "תמונות/נדב.jpeg" }
+  parents: { name: "אבא ואמא (בני 55)", image: "תמונות/אמא ואבא.webp" },
+  naama: { name: "נעמה (בת 30)", image: "תמונות/נעמה.webp" },
+  userDana: { name: "אסף ודנה (בני 27)", image: "תמונות/אסף ודנה.webp" },
+  nadav: { name: "נדב (בן 26 - מצטרף מתאילנד)", image: "תמונות/נדב.webp" }
 };
 
 const flightData = {
