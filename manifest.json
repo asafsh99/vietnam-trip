@@ -1,0 +1,22 @@
+{
+  "name": "המסע המשפחתי לווייטנאם",
+  "short_name": "וייטנאם 2026",
+  "description": "אפליקציית תכנון והשוואת מסלולים למסע המשפחתי בווייטנאם ספטמבר-אוקטובר 2026",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#044b36",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "תמונות/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "תמונות/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

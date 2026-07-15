@@ -77,6 +77,13 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Set default active route
   setActiveRoute(1);
+
+  // Register Service Worker for PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker registered successfully!', reg))
+      .catch(err => console.log('Service Worker registration failed:', err));
+  }
 });
 
 // ==========================================
