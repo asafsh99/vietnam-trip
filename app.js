@@ -180,18 +180,18 @@ function initRouteSelectors() {
 // 4. Map Operations (Leaflet)
 // ==========================================
 function initMap() {
+  const mapEl = document.getElementById('map');
+  if (!mapEl) return;
+
   if (typeof L === 'undefined') {
     console.error("Leaflet is not loaded. The interactive map cannot be initialized.");
-    const mapEl = document.getElementById('map');
-    if (mapEl) {
-      mapEl.innerHTML = `
-        <div style="padding: 40px; text-align: center; color: var(--primary); font-weight: bold; background: rgba(4,75,54,0.05); height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px;">
-          <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: var(--accent);"></i>
-          <span>המפה האינטראקטיבית דורשת חיבור לאינטרנט.</span>
-          <span style="font-size: 0.85rem; font-weight: normal; color: #64748b; max-width: 280px; line-height: 1.4;">אנא ודאו שאתם מחוברים לרשת וטענו מחדש את הדף כדי לצפות במסלול על המפה.</span>
-        </div>
-      `;
-    }
+    mapEl.innerHTML = `
+      <div style="padding: 40px; text-align: center; color: var(--primary); font-weight: bold; background: rgba(4,75,54,0.05); height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px;">
+        <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: var(--accent);"></i>
+        <span>המפה האינטראקטיבית דורשת חיבור לאינטרנט.</span>
+        <span style="font-size: 0.85rem; font-weight: normal; color: #64748b; max-width: 280px; line-height: 1.4;">אנא ודאו שאתם מחוברים לרשת וטענו מחדש את הדף כדי לצפות במסלול על המפה.</span>
+      </div>
+    `;
     return;
   }
 

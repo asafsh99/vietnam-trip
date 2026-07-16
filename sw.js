@@ -1,13 +1,15 @@
-const CACHE_NAME = 'vietnam-trip-v3';
+const CACHE_NAME = 'vietnam-trip-v5';
 const ASSETS = [
   './',
   './index.html',
   './guide.html',
   './compare.html',
   './planner.html',
+  './builder.html',
   './tips.html',
   './style.css',
   './app.js',
+  './builder.js',
   './data.js',
   './manifest.json',
   './תמונות/icon-192.png',

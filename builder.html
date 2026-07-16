@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>בונה מסלול אינטראקטיבי - המסע המשפחתי לווייטנאם</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#044b36">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="תמונות/icon-192.png">
+  
+  <!-- Google Fonts - Rubik -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Leaflet CSS & JS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    /* Builder Specific Styling */
+    .builder-layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 1024px) {
+      .builder-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .filter-section {
+      position: sticky;
+      top: 90px;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    
+    .filter-group {
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--light-gray);
+      padding-bottom: 15px;
+    }
+    
+    .filter-group:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    
+    .filter-group h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+    
+    .checkbox-item:hover {
+      background-color: rgba(4, 75, 54, 0.04);
+    }
+    
+    .checkbox-item input {
+      margin-top: 3px;
+      cursor: pointer;
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+    }
+    
+    .builder-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(4, 75, 54, 0.2);
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .builder-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(4, 75, 54, 0.3);
+    }
+    
+    .workspace-layout {
+      display: grid;
+      grid-template-columns: 1fr 1px; /* Dynamically adjusted or hidden column */
+      gap: 20px;
+    }
+    
+    .result-container {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    .route-warning-box {
+      background-color: rgba(202, 138, 4, 0.08);
+      border-right: 4px solid var(--accent);
+      border-radius: var(--radius-md);
+      padding: 15px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .route-warning-box i {
+      font-size: 1.3rem;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+    
+    .action-row {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .action-btn {
+      flex: 1;
+      padding: 10px 15px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-secondary {
+      background: white;
+      border: 1px solid var(--light-gray);
+      color: var(--dark-light);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--light-gray);
+    }
+    
+    .checked-badge {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: #065f46;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Decorative Blurs -->
+  <div class="blur-bg-1"></div>
+  <div class="blur-bg-2"></div>
+
+  <!-- App Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <i class="fa-solid fa-plane-departure text-emerald"></i>
+        <span>וייטנאם 2026</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html"><i class="fa-solid fa-circle-info"></i> פרטי המסע</a></li>
+          <li><a href="guide.html"><i class="fa-solid fa-map"></i> מדריך יעדים</a></li>
+          <li><a href="compare.html"><i class="fa-solid fa-table-list"></i> השוואת חלופות</a></li>
+          <li><a href="planner.html"><i class="fa-solid fa-map-location-dot"></i> תכנון מסלולים</a></li>
+          <li><a href="builder.html" class="nav-active"><i class="fa-solid fa-wand-magic-sparkles text-gold"></i> מחולל מסלול</a></li>
+          <li><a href="tips.html"><i class="fa-solid fa-lightbulb"></i> טיפים ושדרוגים</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="section-title">
+      <h2><i class="fa-solid fa-wand-magic-sparkles text-gold"></i> מחולל מסלולים משפחתי מותאם אישית</h2>
+      <p>סמנו את האטרקציות והפעילויות שאתם הכי רוצים לעשות בטיול, והמערכת תרכיב לכם את המסלול האופטימלי ביותר ל-11 ימים</p>
+    </div>
+
+    <div class="builder-layout">
+      <!-- Sidebar Filters (Right on RTL) -->
+      <div class="card glass-card filter-section">
+        <div class="card-header border-bottom">
+          <h2><i class="fa-solid fa-sliders text-emerald"></i> מה תרצו לכלול?</h2>
+        </div>
+        <div class="card-body">
+          
+          <!-- Preference Setting -->
+          <div class="filter-group">
+            <h3><i class="fa-solid fa-person-running text-gold"></i> קצב ועדיפות המסלול</h3>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="radio" name="trip-pace" value="relaxed" checked style="accent-color: var(--primary);">
+                <span>קצב רגוע ומפנק (מושלם להורים)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="radio" name="trip-pace" value="balanced" style="accent-color: var(--primary);">
+                <span>קצב מאוזן (חצי הרפתקני וחצי מנוחה)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="radio" name="trip-pace" value="active" style="accent-color: var(--primary);">
+                <span>קצב מהיר (הספק מירבי של כל היעדים)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Destinations Checklist -->
+          <div id="destinations-checklist-container">
+            <!-- Will be populated dynamically by builder.js -->
+          </div>
+
+          <div style="margin-top: 25px;">
+            <button class="builder-btn" id="generate-route-btn">
+              <i class="fa-solid fa-compass"></i> בנה מסלול אופטימלי
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Area (Left on RTL) -->
+      <div class="result-container">
+        
+        <!-- Warning/Info alert if needed -->
+        <div class="route-warning-box" id="builder-warning-box" style="display: none;">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <div>
+            <strong>אזהרת עומס מוגזם!</strong>
+            <p id="builder-warning-text"></p>
+          </div>
+        </div>
+
+        <!-- Route Details Header & Map -->
+        <div class="planner-workspace" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          
+          <!-- Itinerary Column -->
+          <div class="card glass-card route-detail-card">
+            <div class="card-header border-bottom">
+              <div class="route-title-header">
+                <span class="route-badge" id="active-route-badge">מסלול בהתאמה אישית</span>
+                <h3 id="active-route-title">בחרו פעילויות ולחצו על הכפתור</h3>
+                <p id="active-route-subtitle" class="text-muted">המסלול שלכם ייבנה כאן</p>
+              </div>
+              
+              <div class="route-stats-grid" style="margin-top: 15px;">
+                <div class="stat-item">
+                  <span class="stat-icon"><i class="fa-solid fa-plane"></i></span>
+                  <div class="stat-info">
+                    <span class="stat-label">טיסות פנימיות</span>
+                    <span class="stat-val" id="stat-flights">0</span>
+                  </div>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-icon"><i class="fa-solid fa-car-side"></i></span>
+                  <div class="stat-info">
+                    <span class="stat-label">זמני דרך</span>
+                    <span class="stat-val" id="stat-road">0</span>
+                  </div>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-icon"><i class="fa-solid fa-clock"></i></span>
+                  <div class="stat-info">
+                    <span class="stat-label">קצב מסלול</span>
+                    <span class="stat-val" id="stat-pacing">-</span>
+                  </div>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-icon"><i class="fa-solid fa-users"></i></span>
+                  <div class="stat-info">
+                    <span class="stat-label">התאמה להורים</span>
+                    <span class="stat-val" id="stat-parents">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body scrollable-body" style="max-height: 500px; overflow-y: auto; padding: 20px;">
+              <div class="timeline" id="days-timeline">
+                <div style="text-align: center; color: var(--text-muted); padding: 40px 0;">
+                  <i class="fa-solid fa-arrow-right-to-bracket" style="font-size: 2.5rem; margin-bottom: 15px; color: var(--light-gray);"></i>
+                  <p>סמנו את הפעילויות המועדפות עליכם בצד ולחצו על "בנה מסלול אופטימלי"</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="card-footer" style="padding: 15px 20px; background: rgba(0,0,0,0.02); border-top: 1px solid var(--light-gray);">
+              <div class="action-row">
+                <button class="action-btn btn-secondary" id="share-route-btn" disabled>
+                  <i class="fa-solid fa-share-nodes"></i> העתק קישור למסלול
+                </button>
+                <button class="action-btn btn-secondary" id="print-route-btn" disabled>
+                  <i class="fa-solid fa-print"></i> הדפס מסלול
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Map Column -->
+          <div class="card glass-card map-card">
+            <div class="map-overlay">
+              <span id="map-route-title">מפת המסלול המותאם</span>
+              <div class="map-legend">
+                <span class="legend-item"><span class="legend-line line-road"></span>נסיעה יבשתית</span>
+                <span class="legend-item"><span class="legend-line line-flight"></span>טיסה פנימית</span>
+              </div>
+            </div>
+            <div id="map" style="height: 100%; min-height: 450px;"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <p>המסע המשפחתי לווייטנאם - ספטמבר 2026. נבנה באהבה עבור משפחתכם ❤️</p>
+      <p class="small text-muted">פותר הטיולים האולטימטיבי | מופעל על ידי Antigravity</p>
+    </div>
+  </footer>
+
+  <!-- Include data file first -->
+  <script src="data.js"></script>
+  
+  <!-- Builder logic script -->
+  <script src="builder.js"></script>
+
+</body>
+</html>
