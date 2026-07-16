@@ -1054,8 +1054,8 @@ nav a.nav-active {
 footer {
   background-color: var(--primary);
   color: white;
-  padding: 40px 0;
-  border-top: 3px solid var(--accent);
+  padding: 12px 0;
+  border-top: 2px solid var(--accent);
 }
 
 .footer-container {
@@ -1064,12 +1064,15 @@ footer {
   padding: 0 40px;
   text-align: center;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .footer-container p {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
+  margin: 0;
 }
 
 /* ==========================================
